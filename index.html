@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boilerplate App</title>
+  <link rel="manifest" href="manifest.json">
+  <!-- Tailwind CSS CDN (Preserved from your original file) -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col items-center p-4">
+
+  <!-- Header Section -->
+  <header class="w-full max-w-md bg-blue-900 text-white rounded-xl p-6 text-center shadow-md mb-6">
+    <h1 id="app-title" class="text-2xl font-bold tracking-tight">Boilerplate App</h1>
+    <p id="app-subtitle" class="text-blue-200 text-sm mt-1">Template Base</p>
+  </header>
+
+  <!-- Main Display Card -->
+  <main class="w-full max-w-md bg-white rounded-xl p-6 shadow-md border border-gray-100 flex flex-col gap-4">
+    
+    <!-- Status / Notification Bar -->
+    <div id="status-message" class="text-center p-3 bg-blue-50 text-blue-800 rounded-lg text-sm font-medium">
+      Loading template data...
+    </div>
+
+    <!-- Data Presentation Area -->
+    <div class="border border-gray-100 rounded-lg p-6 text-center bg-gray-50 min-h-[120px] flex flex-col justify-center items-center gap-2">
+      <h2 id="primary-display" class="text-xl font-bold text-gray-900">Placeholder Title</h2>
+      <p id="secondary-display" class="text-gray-500 text-sm italic">Placeholder description or translation goes here.</p>
+    </div>
+
+    <!-- Interface Controls -->
+    <div class="flex gap-3 mt-2">
+      <button id="prev-btn" class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg transition-colors cursor-pointer">
+        Previous
+      </button>
+      <button id="next-btn" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition-colors cursor-pointer">
+        Next
+      </button>
+    </div>
+  </main>
+
+  <script>
+    // 1. Service Worker Registration (Identical to your original file)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registered successfully!', reg.scope))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+
+    // 2. Core App State & Generic Boilerplate Data Structure
+    // (Replaced your Luganda list array with generic template rows)
+    let appData = [
+      { id: 1, primary: "Template Item One", secondary: "Description or value response A" },
+      { id: 2, primary: "Template Item Two", secondary: "Description or value response B" },
+      { id: 3, primary: "Template Item Three", secondary: "Description or value response C" }
+    ];
+    
+    let currentIndex = 0;
+
+    // 3. DOM Elements
+    const primaryDisplay = document.getElementById('primary-display');
+    const secondaryDisplay = document.getElementById('secondary-display');
+    const statusMessage = document.getElementById('status-message');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+
+    // 4. Render Engine (Preserved from original navigation design)
+    function renderCurrentItem() {
+      if (appData.length === 0) {
+        primaryDisplay.textContent = "No Data Loaded";
+        secondaryDisplay.textContent = "";
+        statusMessage.textContent = "Data array is empty.";
+        return;
+      }
+      
+      const item = appData[currentIndex];
+      primaryDisplay.textContent = item.primary;
+      secondaryDisplay.textContent = item.secondary;
+      statusMessage.textContent = `Viewing item ${currentIndex + 1} of ${appData.length}`;
+    }
+
+    // 5. Event Listeners (Preserved original navigation button logic)
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderCurrentItem();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < appData.length - 1) {
+        currentIndex++;
+        renderCurrentItem();
+      }
+    });
+
+    // Initial load presentation
+    renderCurrentItem();
+  </script>
+</body>
+</html>
