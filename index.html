@@ -1,105 +1,440 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boilerplate App</title>
-  <link rel="manifest" href="manifest.json">
-  <!-- Tailwind CSS CDN (Preserved from your original file) -->
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boilerplate PWA</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        /* Clean, modern resets */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        header h1 {
+            color: #1e3a8a;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+
+        /* Category Dropdown Styling */
+        .selector-container {
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        .category-select {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            background-color: white;
+            color: #1e3a8a;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .category-select:focus {
+            border-color: #1e3a8a;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        /* Progress Counter Style */
+        .progress-counter {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #64748b;
+            letter-spacing: 0.5px;
+            margin-bottom: -15px;
+        }
+
+        /* 3D Flashcard Wrapper */
+        .flashcard-container {
+            width: 100%;
+            height: 280px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+        }
+
+        .flashcard.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-side {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card-front {
+            background-color: #ffffff;
+            color: #1e293b;
+        }
+
+        .card-front h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            word-break: break-word;
+        }
+
+        .card-back {
+            background-color: #1e3a8a;
+            color: #ffffff;
+            transform: rotateY(180deg);
+        }
+
+        .card-back h3 {
+            font-size: 1.2rem;
+            font-weight: 400;
+            opacity: 0.8;
+            word-break: break-word;
+        }
+
+        .card-back hr {
+            width: 40%;
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 15px 0;
+        }
+
+        .card-back h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.4;
+        }
+
+        .controls {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* BASE BUTTON RESET */
+        .btn-base {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-base:active {
+            transform: scale(0.98);
+        }
+
+        /* PRIMARY ACTION: Next Word */
+        .btn-primary {
+            background-color: #10b981;
+            color: white;
+            padding: 36px; 
+            font-size: 1.25rem; 
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: #059669;
+        }
+
+        /* SECONDARY ACTION: Review Again */
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #475569;
+            padding: 16px; 
+            font-size: 1.05rem;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+            color: #1e293b;
+        }
+
+        /* Version Badge Styling */
+        footer {
+            margin-top: auto;
+            padding-top: 40px;
+            padding-bottom: 10px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col items-center p-4">
+<body>
 
-  <!-- Header Section -->
-  <header class="w-full max-w-md bg-blue-900 text-white rounded-xl p-6 text-center shadow-md mb-6">
-    <h1 id="app-title" class="text-2xl font-bold tracking-tight">Boilerplate App</h1>
-    <p id="app-subtitle" class="text-blue-200 text-sm mt-1">Template Base</p>
-  </header>
+    <div id="networkDebugger" style="display: none;"></div>
 
-  <!-- Main Display Card -->
-  <main class="w-full max-w-md bg-white rounded-xl p-6 shadow-md border border-gray-100 flex flex-col gap-4">
-    
-    <!-- Status / Notification Bar -->
-    <div id="status-message" class="text-center p-3 bg-blue-50 text-blue-800 rounded-lg text-sm font-medium">
-      Loading template data...
-    </div>
+    <header>
+        <h1>Luganda Learner</h1>
+        <div class="selector-container">
+            <select id="categorySelect" class="category-select" onchange="switchCategory(this.value)">
+                <option value="small words">✏️ Small Words</option>
+                <option value="family">👨‍👩‍👧‍👦 Family</option>
+                <option value="food">🍌 Food</option>
+                <option value="body parts">💪 Body Parts</option>
+                <option value="household items">🏠 Household Items</option>
+                <option value="outside">🌳 Outside</option>
+                <option value="new words">New Words</option>
+            </select>
+        </div>
+    </header>
 
-    <!-- Data Presentation Area -->
-    <div class="border border-gray-100 rounded-lg p-6 text-center bg-gray-50 min-h-[120px] flex flex-col justify-center items-center gap-2">
-      <h2 id="primary-display" class="text-xl font-bold text-gray-900">Placeholder Title</h2>
-      <p id="secondary-display" class="text-gray-500 text-sm italic">Placeholder description or translation goes here.</p>
-    </div>
+    <main class="app-container">
+        <div id="progressCounter" class="progress-counter">--/--</div>
 
-    <!-- Interface Controls -->
-    <div class="flex gap-3 mt-2">
-      <button id="prev-btn" class="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold rounded-lg transition-colors cursor-pointer">
-        Previous
-      </button>
-      <button id="next-btn" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition-colors cursor-pointer">
-        Next
-      </button>
-    </div>
-  </main>
+        <div class="flashcard-container" id="flashcardContainer">
+            <div class="flashcard" id="flashcard">
+                <div class="card-side card-front">
+                    <h2 id="lugandaFront">Loading...</h2>
+                    <span class="hint">Tap to flip</span>
+                </div>
+                <div class="card-side card-back">
+                    <h3 id="lugandaBack">Loading...</h3>
+                    <hr>
+                    <h2 id="englishBack">Loading...</h2>
+                    <span class="hint">Tap to flip back</span>
+                </div>
+            </div>
+        </div>
 
-  <script>
-    // 1. Service Worker Registration (Identical to your original file)
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-          .then(reg => console.log('Service Worker registered successfully!', reg.scope))
-          .catch(err => console.error('Service Worker registration failed:', err));
-      });
-    }
+        <div class="controls">
+            <button id="nextBtn" class="btn-base btn-primary">Next Word &rarr;</button>
+            <button id="reviewBtn" class="btn-base btn-secondary">Review again</button>
+        </div>
+    </main>
 
-    // 2. Core App State & Generic Boilerplate Data Structure
-    // (Replaced your Luganda list array with generic template rows)
-    let appData = [
-      { id: 1, primary: "Template Item One", secondary: "Description or value response A" },
-      { id: 2, primary: "Template Item Two", secondary: "Description or value response B" },
-      { id: 3, primary: "Template Item Three", secondary: "Description or value response C" }
-    ];
-    
-    let currentIndex = 0;
+    <footer>
+        App Version: v1.7-Storage-Fallback
+    </footer>
 
-    // 3. DOM Elements
-    const primaryDisplay = document.getElementById('primary-display');
-    const secondaryDisplay = document.getElementById('secondary-display');
-    const statusMessage = document.getElementById('status-message');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
+    <script>
+        let masterDatabase = {};
+        let activeList = [];
+        let shuffledDeck = [];
+        let currentCardItem = null;
 
-    // 4. Render Engine (Preserved from original navigation design)
-    function renderCurrentItem() {
-      if (appData.length === 0) {
-        primaryDisplay.textContent = "No Data Loaded";
-        secondaryDisplay.textContent = "";
-        statusMessage.textContent = "Data array is empty.";
-        return;
-      }
-      
-      const item = appData[currentIndex];
-      primaryDisplay.textContent = item.primary;
-      secondaryDisplay.textContent = item.secondary;
-      statusMessage.textContent = `Viewing item ${currentIndex + 1} of ${appData.length}`;
-    }
+        const flashcard = document.getElementById('flashcard');
+        const nextBtn = document.getElementById('nextBtn');
+        const reviewBtn = document.getElementById('reviewBtn');
+        const lugandaFront = document.getElementById('lugandaFront');
+        const lugandaBack = document.getElementById('lugandaBack');
+        const englishBack = document.getElementById('englishBack');
+        const categorySelect = document.getElementById('categorySelect');
+        const progressCounter = document.getElementById('progressCounter');
 
-    // 5. Event Listeners (Preserved original navigation button logic)
-    prevBtn.addEventListener('click', () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        renderCurrentItem();
-      }
-    });
+        async function loadMasterData() {
+            const debugBox = document.getElementById('networkDebugger');
+            let rawText = "";
+            
+            try {
+                // Drop your published Google Sheet CSV link below:
+                const cloudUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfnLZbNhfSiw-xsabAsZW-tvg96yKPRWNnZ9oZu-is1iTpgogFqlBMoIk6H1WM9w/pub?output=csv';
+                
+                debugBox.innerHTML = "Status: Fetching from Cloud...";
+                const response = await fetch(`${cloudUrl}&t=${new Date().getTime()}`);
+                if (!response.ok) throw new Error("Cloud fetch failed status");
+                rawText = await response.text();
+                
+                // Parse the cloud text into our database structure
+                parseAndStoreCSV(rawText);
+                
+            } catch (error) {
+                console.log("Cloud unavailable. Checking local storage fallback...", error);
+                const storedData = localStorage.getItem('cachedBoilerplateData');
+                
+                if (storedData) {
+                    masterDatabase = JSON.parse(storedData);
+                    instantiateCategorySelection();
+                } else {
+                    lugandaFront.innerText = "Offline: No saved data found";
+                    console.error("Both cloud and local fallback storage empty.");
+                }
+            }
+        }
 
-    nextBtn.addEventListener('click', () => {
-      if (currentIndex < appData.length - 1) {
-        currentIndex++;
-        renderCurrentItem();
-      }
-    });
+        function parseAndStoreCSV(text) {
+            masterDatabase = {}; 
+            const rows = text.split(/[\r\n]+/);
+            
+            for (let i = 0; i < rows.length; i++) {
+                const currentRow = rows[i].trim();
+                if (!currentRow) continue; 
+                
+                const columns = currentRow.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                if (columns.length < 3) continue; 
+                
+                const rawCategory = columns[0].replace(/^"|"$/g, '').trim(); 
+                const category = rawCategory.toLowerCase();
+                
+                const lugandaWord = columns[1].replace(/^"|"$/g, '').trim();
+                const englishWord = columns[2].replace(/^"|"$/g, '').trim();
+                
+                if (category === 'category') continue;
+                
+                if (!masterDatabase[category]) {
+                    masterDatabase[category] = [];
+                }
+                
+                masterDatabase[category].push({ 
+                    luganda: lugandaWord, 
+                    english: englishWord 
+                });
+            }
+            
+            // Save to browser memory for complete offline access
+            localStorage.setItem('cachedBoilerplateData', JSON.stringify(masterDatabase));
+            instantiateCategorySelection();
+        }
 
-    // Initial load presentation
-    renderCurrentItem();
-  </script>
+        function instantiateCategorySelection() {
+            let currentSelection = categorySelect.value.toLowerCase();
+            if (masterDatabase[currentSelection]) {
+                switchCategory(currentSelection);
+            } else {
+                const fallback = Object.keys(masterDatabase)[0];
+                if (fallback) switchCategory(fallback);
+            }
+        }
+        
+        function switchCategory(categoryKey) {
+            const targetKey = categoryKey.toLowerCase();
+            if (!masterDatabase[targetKey]) return;
+            
+            activeList = masterDatabase[targetKey];
+            shuffledDeck = [];
+            currentCardItem = null;
+            
+            getNewWord();
+        }
+
+        function updateProgressUI() {
+            if (activeList.length === 0) {
+                progressCounter.textContent = "0/0";
+                return;
+            }
+            let remainingCount = shuffledDeck.length;
+            if (currentCardItem) {
+                remainingCount += 1;
+            }
+            
+            progressCounter.textContent = `${remainingCount}/${activeList.length}`;
+        }
+
+        function getNewWord() {
+            if (activeList.length === 0) {
+                lugandaFront.textContent = "Empty Deck";
+                lugandaBack.textContent = "Empty Deck";
+                englishBack.textContent = "No words found in this category.";
+                updateProgressUI();
+                return;
+            }
+            
+            flashcard.classList.remove('is-flipped');
+            
+            setTimeout(() => {
+                if (shuffledDeck.length === 0) {
+                    shuffledDeck = [...activeList]; 
+                }
+                
+                let randomIndex = Math.floor(Math.random() * shuffledDeck.length);
+                currentCardItem = shuffledDeck.splice(randomIndex, 1)[0];
+                
+                lugandaFront.textContent = currentCardItem.luganda;
+                lugandaBack.textContent = currentCardItem.luganda;
+                englishBack.textContent = currentCardItem.english;
+                
+                updateProgressUI();
+            }, 200);
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentCardItem = null; 
+            getNewWord();
+        });
+
+        reviewBtn.addEventListener('click', () => {
+            if (currentCardItem) {
+                shuffledDeck.push(currentCardItem); 
+                currentCardItem = null;
+            }
+            getNewWord();
+        });
+
+        flashcard.addEventListener('click', () => {
+            flashcard.classList.toggle('is-flipped');
+        });
+
+        window.addEventListener('DOMContentLoaded', loadMasterData);
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
 </body>
 </html>
