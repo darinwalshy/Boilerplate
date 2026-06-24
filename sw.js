@@ -1,4 +1,4 @@
-const CACHE_NAME = 'framework-boilerplate-v1.0';
+const CACHE_NAME = 'framework-boilerplate-v1.1';
 const REPO_NAME = '/Boilerplate';
 
 const ASSETS = [
