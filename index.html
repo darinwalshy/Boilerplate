@@ -132,7 +132,7 @@
     </main>
 
     <footer>
-        App Version: v2.1-Canvas-Test
+        App Version: v2.2-Canvas-Test
     </footer>
 
     <script>
@@ -239,8 +239,14 @@
 
         window.addEventListener('DOMContentLoaded', loadMasterData);
 
+        
+        // Change this block at the bottom of index.html:
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js', { scope: './' })
+                    .then((reg) => console.log('Boilerplate Service Worker registered with scope:', reg.scope))
+                    .catch((err) => console.log('Boilerplate Service Worker registration failed:', err));
+            });
         }
     </script>
 </body>
