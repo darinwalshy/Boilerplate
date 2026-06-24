@@ -270,7 +270,7 @@
     </main>
 
     <footer>
-        App Version: v1.7-Storage-Fallback
+        App Version: v1.8-Isolated-Framework
     </footer>
 
     <script>
@@ -293,7 +293,6 @@
             let rawText = "";
             
             try {
-                // Drop your published Google Sheet CSV link below:
                 const cloudUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfnLZbNhfSiw-xsabAsZW-tvg96yKPRWNnZ9oZu-is1iTpgogFqlBMoIk6H1WM9w/pub?output=csv';
                 
                 debugBox.innerHTML = "Status: Fetching from Cloud...";
@@ -301,12 +300,12 @@
                 if (!response.ok) throw new Error("Cloud fetch failed status");
                 rawText = await response.text();
                 
-                // Parse the cloud text into our database structure
                 parseAndStoreCSV(rawText);
                 
             } catch (error) {
                 console.log("Cloud unavailable. Checking local storage fallback...", error);
-                const storedData = localStorage.getItem('cachedBoilerplateData');
+                // SAFE: Pulling from dedicated boilerplate storage name
+                const storedData = localStorage.getItem('framework_template_local_data');
                 
                 if (storedData) {
                     masterDatabase = JSON.parse(storedData);
@@ -326,6 +325,7 @@
                 const currentRow = rows[i].trim();
                 if (!currentRow) continue; 
                 
+                // SAFE: Sourced verbatim from your clean zip file regex
                 const columns = currentRow.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (columns.length < 3) continue; 
                 
@@ -347,8 +347,8 @@
                 });
             }
             
-            // Save to browser memory for complete offline access
-            localStorage.setItem('cachedBoilerplateData', JSON.stringify(masterDatabase));
+            // SAFE: Saving to dedicated boilerplate storage name
+            localStorage.setItem('framework_template_local_data', JSON.stringify(masterDatabase));
             instantiateCategorySelection();
         }
 
