@@ -1,5 +1,5 @@
-const CACHE_NAME = 'framework-boilerplate-v1.1';
-const REPO_NAME = '/Boilerplate';
+const CACHE_NAME = 'framework-boilerplate-v1';
+const REPO_NAME = '/Boilerplate-main';
 
 const ASSETS = [
   `${REPO_NAME}/`,
@@ -7,9 +7,8 @@ const ASSETS = [
   `${REPO_NAME}/manifest.json`
 ];
 
-// Install event
+// Install event: cache core assets
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); 
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
@@ -17,12 +16,16 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate event
+// Activate event: clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+        cacheNames.map((cache) => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
+          }
+        })
       );
     })
   );
@@ -34,7 +37,9 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(event.request).catch(() => {
         return caches.match(event.request).then((response) => {
-          return response || caches.match(`${REPO_NAME}/index.html`);
+          return response || 
+                 caches.match(`${REPO_NAME}/index.html`) || 
+                 caches.match(`${REPO_NAME}/`);
         });
       })
     );
