@@ -21,6 +21,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
         }
 
         header {
@@ -54,6 +55,7 @@
         main {
             width: 100%;
             max-width: 600px;
+            flex-grow: 1;
         }
 
         .category-title {
@@ -95,6 +97,19 @@
             font-style: italic;
             color: #64748b;
         }
+
+        /* Minimal Version Badge */
+        footer {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -115,6 +130,10 @@
             <p class="status-message">Connecting to data stream...</p>
         </div>
     </main>
+
+    <footer>
+        App Version: v2.1-Canvas-Test
+    </footer>
 
     <script>
         let masterDatabase = {};
