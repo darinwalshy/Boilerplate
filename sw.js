@@ -1,4 +1,4 @@
-const CACHE_NAME = 'boilerplate-pwa-v1.0';
+const CACHE_NAME = 'framework-boilerplate-v1.0';
 const REPO_NAME = '/Boilerplate';
 
 const ASSETS = [
