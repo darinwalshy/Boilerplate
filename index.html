@@ -188,7 +188,7 @@
             transform: scale(0.98);
         }
 
-        /* PRIMARY ACTION: Next Word */
+        /* PRIMARY ACTION: Next Item */
         .btn-primary {
             background-color: #10b981;
             color: white;
@@ -231,16 +231,11 @@
     <div id="networkDebugger" style="display: none;"></div>
 
     <header>
-        <h1>Luganda Learner</h1>
+        <h1>App Boilerplate</h1>
         <div class="selector-container">
             <select id="categorySelect" class="category-select" onchange="switchCategory(this.value)">
-                <option value="small words">✏️ Small Words</option>
-                <option value="family">👨‍👩‍👧‍👦 Family</option>
-                <option value="food">🍌 Food</option>
-                <option value="body parts">💪 Body Parts</option>
-                <option value="household items">🏠 Household Items</option>
-                <option value="outside">🌳 Outside</option>
-                <option value="new words">New Words</option>
+                <option value="colors">🎨 Colors</option>
+                <option value="shapes">📐 Shapes</option>
             </select>
         </div>
     </header>
@@ -251,26 +246,26 @@
         <div class="flashcard-container" id="flashcardContainer">
             <div class="flashcard" id="flashcard">
                 <div class="card-side card-front">
-                    <h2 id="lugandaFront">Loading...</h2>
+                    <h2 id="cardFrontText">Loading...</h2>
                     <span class="hint">Tap to flip</span>
                 </div>
                 <div class="card-side card-back">
-                    <h3 id="lugandaBack">Loading...</h3>
+                    <h3 id="cardBackTitle">Loading...</h3>
                     <hr>
-                    <h2 id="englishBack">Loading...</h2>
+                    <h2 id="cardBackDesc">Loading...</h2>
                     <span class="hint">Tap to flip back</span>
                 </div>
             </div>
         </div>
 
         <div class="controls">
-            <button id="nextBtn" class="btn-base btn-primary">Next Word &rarr;</button>
+            <button id="nextBtn" class="btn-base btn-primary">Next Item &rarr;</button>
             <button id="reviewBtn" class="btn-base btn-secondary">Review again</button>
         </div>
     </main>
 
     <footer>
-        App Version: v1.8-Isolated-Framework
+        App Version: v2.0-Clean-Boilerplate
     </footer>
 
     <script>
@@ -282,9 +277,9 @@
         const flashcard = document.getElementById('flashcard');
         const nextBtn = document.getElementById('nextBtn');
         const reviewBtn = document.getElementById('reviewBtn');
-        const lugandaFront = document.getElementById('lugandaFront');
-        const lugandaBack = document.getElementById('lugandaBack');
-        const englishBack = document.getElementById('englishBack');
+        const cardFrontText = document.getElementById('cardFrontText');
+        const cardBackTitle = document.getElementById('cardBackTitle');
+        const cardBackDesc = document.getElementById('cardBackDesc');
         const categorySelect = document.getElementById('categorySelect');
         const progressCounter = document.getElementById('progressCounter');
 
@@ -293,7 +288,8 @@
             let rawText = "";
             
             try {
-                const cloudUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTfnLZbNhfSiw-xsabAsZW-tvg96yKPRWNnZ9oZu-is1iTpgogFqlBMoIk6H1WM9w/pub?output=csv';
+                // Sourced from your new template spreadsheet
+                const cloudUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRpIlbRDo-NX3VAOUYsy8RVJGAKDIqyXLy5eTB1jnzd9TnMChnDphyUB3NRkSbo6w/pub?output=csv';
                 
                 debugBox.innerHTML = "Status: Fetching from Cloud...";
                 const response = await fetch(`${cloudUrl}&t=${new Date().getTime()}`);
@@ -304,14 +300,13 @@
                 
             } catch (error) {
                 console.log("Cloud unavailable. Checking local storage fallback...", error);
-                // SAFE: Pulling from dedicated boilerplate storage name
                 const storedData = localStorage.getItem('framework_template_local_data');
                 
                 if (storedData) {
                     masterDatabase = JSON.parse(storedData);
                     instantiateCategorySelection();
                 } else {
-                    lugandaFront.innerText = "Offline: No saved data found";
+                    cardFrontText.innerText = "Offline: No saved data found";
                     console.error("Both cloud and local fallback storage empty.");
                 }
             }
@@ -325,15 +320,14 @@
                 const currentRow = rows[i].trim();
                 if (!currentRow) continue; 
                 
-                // SAFE: Sourced verbatim from your clean zip file regex
                 const columns = currentRow.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
                 if (columns.length < 3) continue; 
                 
                 const rawCategory = columns[0].replace(/^"|"$/g, '').trim(); 
                 const category = rawCategory.toLowerCase();
                 
-                const lugandaWord = columns[1].replace(/^"|"$/g, '').trim();
-                const englishWord = columns[2].replace(/^"|"$/g, '').trim();
+                const frontValue = columns[1].replace(/^"|"$/g, '').trim();
+                const backValue = columns[2].replace(/^"|"$/g, '').trim();
                 
                 if (category === 'category') continue;
                 
@@ -342,12 +336,11 @@
                 }
                 
                 masterDatabase[category].push({ 
-                    luganda: lugandaWord, 
-                    english: englishWord 
+                    front: frontValue, 
+                    back: backValue 
                 });
             }
             
-            // SAFE: Saving to dedicated boilerplate storage name
             localStorage.setItem('framework_template_local_data', JSON.stringify(masterDatabase));
             instantiateCategorySelection();
         }
@@ -388,9 +381,9 @@
 
         function getNewWord() {
             if (activeList.length === 0) {
-                lugandaFront.textContent = "Empty Deck";
-                lugandaBack.textContent = "Empty Deck";
-                englishBack.textContent = "No words found in this category.";
+                cardFrontText.textContent = "Empty Deck";
+                cardBackTitle.textContent = "Empty Deck";
+                cardBackDesc.textContent = "No items found in this category.";
                 updateProgressUI();
                 return;
             }
@@ -405,9 +398,9 @@
                 let randomIndex = Math.floor(Math.random() * shuffledDeck.length);
                 currentCardItem = shuffledDeck.splice(randomIndex, 1)[0];
                 
-                lugandaFront.textContent = currentCardItem.luganda;
-                lugandaBack.textContent = currentCardItem.luganda;
-                englishBack.textContent = currentCardItem.english;
+                cardFrontText.textContent = currentCardItem.front;
+                cardBackTitle.textContent = currentCardItem.front;
+                cardBackDesc.textContent = currentCardItem.back;
                 
                 updateProgressUI();
             }, 200);
