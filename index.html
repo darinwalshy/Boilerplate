@@ -2,245 +2,297 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boilerplate PWA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Framework Boilerplate</title>
     <link rel="manifest" href="manifest.json">
     <style>
-        /* Minimal, clean layout */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background-color: #ffffff;
-            color: #1e293b;
-            padding: 40px 20px;
+            background-color: #f4f6f9;
+            color: #333;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            padding: 20px;
         }
 
-        header {
-            width: 100%;
-            max-width: 600px;
-            margin-bottom: 30px;
+        .header {
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
+        .header h1 {
+            color: #1e3a8a;
+            font-size: 28px;
             margin-bottom: 15px;
         }
 
-        .selector-container {
+        .tabs {
+            display: flex;
+            justify-content: center;
             width: 100%;
+            max-width: 450px;
+            background-color: #e2e8f0;
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 20px;
         }
 
-        .category-select {
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            background: none;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background-color: white;
+            color: #1e3a8a;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
             width: 100%;
             padding: 12px;
-            font-size: 1rem;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            background-color: #f8fafc;
-            color: #0f172a;
-            cursor: pointer;
+            font-size: 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
             outline: none;
+            transition: border-color 0.2s;
         }
 
-        main {
-            width: 100%;
-            max-width: 600px;
-            flex-grow: 1;
+        .form-control:focus {
+            border-color: #3b82f6;
         }
 
-        .category-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            text-transform: capitalize;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 8px;
-        }
-
-        /* Clean data list canvas */
-        .data-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .data-item {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
+        .result-box {
+            margin-top: 24px;
             padding: 16px;
+            background-color: #eff6ff;
+            border-radius: 12px;
+            border: 1px solid #bfdbfe;
         }
 
-        .data-item-front {
-            font-size: 1.1rem;
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 16px;
+        }
+
+        .result-row:not(:last-child) {
+            border-bottom: 1px solid #dbeafe;
+        }
+
+        .result-label {
             font-weight: 600;
-            color: #0f172a;
-            margin-bottom: 4px;
+            color: #1e40af;
         }
 
-        .data-item-back {
-            font-size: 0.95rem;
-            color: #475569;
+        .result-value {
+            font-weight: 800;
+            color: #1e3a8a;
         }
 
-        .status-message {
-            font-style: italic;
-            color: #64748b;
-        }
-
-        /* Minimal Version Badge */
-        footer {
+        .btn {
             width: 100%;
-            max-width: 600px;
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #f1f5f9;
-            font-size: 0.85rem;
-            color: #94a3b8;
-            font-weight: 500;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 12px;
+            background-color: #3b82f6;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
+            transition: all 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Data Engine Boilerplate</h1>
-        <div class="selector-container">
-            <select id="categorySelect" class="category-select" onchange="switchCategory(this.value)">
-                <option value="colors">🎨 Colors</option>
-                <option value="shapes">📐 Shapes</option>
-            </select>
-        </div>
-    </header>
+    <div class="header">
+        <h1>Framework Boilerplate</h1>
+    </div>
 
-    <main>
-        <h2 id="categoryTitle" class="category-title">Loading...</h2>
-        <div id="dataDisplayCanvas" class="data-list">
-            <p class="status-message">Connecting to data stream...</p>
-        </div>
-    </main>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('tab1')">Calculator One</button>
+        <button class="tab-btn" onclick="switchTab('tab2')">Calculator Two</button>
+    </div>
 
-    <footer>
-        App Version: v2.1-Canvas-Test
-    </footer>
+    <!-- TAB 1 CONTENT -->
+    <div id="tab1" class="tab-content active">
+        <div class="form-group">
+            <label for="input1_tab1">What is the baseline quantity or production count?</label>
+            <input type="number" id="input1_tab1" class="form-control" placeholder="0" oninput="calculateTab1()">
+        </div>
+        <div class="form-group">
+            <label for="input2_tab1">What is the raw cost amount per unit item?</label>
+            <input type="number" id="input2_tab1" class="form-control" placeholder="0" oninput="calculateTab1()">
+        </div>
+        <div class="result-box">
+            <div class="result-row">
+                <span class="result-label">Calculated Subtotal</span>
+                <span id="res_subtotal" class="result-value">0</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Final Value Balance</span>
+                <span id="res_final" class="result-value">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2 CONTENT -->
+    <div id="tab2" class="tab-content">
+        <div class="form-group">
+            <label for="input1_tab2">What is the total operational target capacity?</label>
+            <input type="number" id="input1_tab2" class="form-control" placeholder="0" oninput="calculateTab2()">
+        </div>
+        <div class="form-group">
+            <label for="input2_tab2">What is the observed resource usage or metric expenditure?</label>
+            <input type="number" id="input2_tab2" class="form-control" placeholder="0" oninput="calculateTab2()">
+        </div>
+        <div class="result-box">
+            <div class="result-row">
+                <span class="result-label">Operational Efficiency</span>
+                <span id="res_efficiency" class="result-value">0</span>
+            </div>
+        </div>
+    </div>
 
     <script>
-        let masterDatabase = {};
-
-        const categorySelect = document.getElementById('categorySelect');
-        const categoryTitle = document.getElementById('categoryTitle');
-        const dataDisplayCanvas = document.getElementById('dataDisplayCanvas');
-
-        async function loadMasterData() {
-            let rawText = "";
-            try {
-                const cloudUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRpIlbRDo-NX3VAOUYsy8RVJGAKDIqyXLy5eTB1jnzd9TnMChnDphyUB3NRkSbo6w/pub?output=csv';
-                
-                const response = await fetch(`${cloudUrl}&t=${new Date().getTime()}`);
-                if (!response.ok) throw new Error("Network response was not ok");
-                rawText = await response.text();
-                
-                parseAndStoreCSV(rawText);
-                
-            } catch (error) {
-                console.log("Cloud stream offline. Checking local container...", error);
-                const storedData = localStorage.getItem('framework_template_local_data');
-                
-                if (storedData) {
-                    masterDatabase = JSON.parse(storedData);
-                    instantiateCategorySelection();
-                } else {
-                    dataDisplayCanvas.innerHTML = `<p class="status-message">Offline: No cached data structures found.</p>`;
-                }
-            }
-        }
-
-        function parseAndStoreCSV(text) {
-            masterDatabase = {}; 
-            const rows = text.split(/[\r\n]+/);
-            
-            for (let i = 0; i < rows.length; i++) {
-                const currentRow = rows[i].trim();
-                if (!currentRow) continue; 
-                
-                const columns = currentRow.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                if (columns.length < 3) continue; 
-                
-                const rawCategory = columns[0].replace(/^"|"$/g, '').trim(); 
-                const category = rawCategory.toLowerCase();
-                
-                const frontValue = columns[1].replace(/^"|"$/g, '').trim();
-                const backValue = columns[2].replace(/^"|"$/g, '').trim();
-                
-                if (category === 'category') continue;
-                
-                if (!masterDatabase[category]) {
-                    masterDatabase[category] = [];
-                }
-                
-                masterDatabase[category].push({ 
-                    front: frontValue, 
-                    back: backValue 
-                });
-            }
-            
-            localStorage.setItem('framework_template_local_data', JSON.stringify(masterDatabase));
-            instantiateCategorySelection();
-        }
-
-        function instantiateCategorySelection() {
-            let currentSelection = categorySelect.value.toLowerCase();
-            if (masterDatabase[currentSelection]) {
-                switchCategory(currentSelection);
-            } else {
-                const fallback = Object.keys(masterDatabase)[0];
-                if (fallback) switchCategory(fallback);
-            }
-        }
-        
-        function switchCategory(categoryKey) {
-            const targetKey = categoryKey.toLowerCase();
-            categoryTitle.textContent = targetKey;
-            
-            if (!masterDatabase[targetKey] || masterDatabase[targetKey].length === 0) {
-                dataDisplayCanvas.innerHTML = `<p class="status-message">No content structures found in this category.</p>`;
-                return;
-            }
-            
-            renderCanvas(masterDatabase[targetKey]);
-        }
-
-        function renderCanvas(records) {
-            dataDisplayCanvas.innerHTML = ""; // Clear active viewport
-            
-            records.forEach(item => {
-                const itemCard = document.createElement('div');
-                itemCard.className = 'data-item';
-                
-                itemCard.innerHTML = `
-                    <div class="data-item-front">${item.front}</div>
-                    <div class="data-item-back">${item.back}</div>
-                `;
-                
-                dataDisplayCanvas.appendChild(itemCard);
+        // TAB SWITCHING MANAGEMENT WITH STATE RETENTION
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
             });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            const clickedBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => 
+                btn.getAttribute('onclick').includes(tabId)
+            );
+            if (clickedBtn) clickedBtn.classList.add('active');
+            
+            localStorage.setItem('boilerplate_active_tab', tabId);
         }
 
-        window.addEventListener('DOMContentLoaded', loadMasterData);
+        // TAB 1 CORE LOGIC & CALCULATION
+        function calculateTab1() {
+            const val1 = parseFloat(document.getElementById('input1_tab1').value) || 0;
+            const val2 = parseFloat(document.getElementById('input2_tab1').value) || 0;
+            
+            const subtotal = val1 * val2;
+            const finalVal = subtotal * 1.15; // Placeholder structural adjustment factor
 
+            document.getElementById('res_subtotal').innerText = subtotal.toLocaleString();
+            document.getElementById('res_final').innerText = finalVal.toLocaleString();
+            
+            saveFieldState();
+        }
+
+        // TAB 2 CORE LOGIC & CALCULATION
+        function calculateTab2() {
+            const target = parseFloat(document.getElementById('input1_tab2').value) || 0;
+            const spent = parseFloat(document.getElementById('input2_tab2').value) || 0;
+            
+            let efficiency = 0;
+            if (target > 0) {
+                efficiency = (spent / target) * 100;
+            }
+
+            document.getElementById('res_efficiency').innerText = efficiency.toFixed(1) + '%';
+            
+            saveFieldState();
+        }
+
+        // SECURE PERSISTENCE VIA LOCALSTORAGE FOR SYSTEM STATE RECOVERY
+        function saveFieldState() {
+            const state = {
+                input1_t1: document.getElementById('input1_tab1').value,
+                input2_t1: document.getElementById('input2_tab1').value,
+                input1_t2: document.getElementById('input1_tab2').value,
+                input2_t2: document.getElementById('input2_tab2').value,
+            };
+            localStorage.setItem('boilerplate_field_cache', JSON.stringify(state));
+        }
+
+        function restoreFieldState() {
+            const savedFields = localStorage.getItem('boilerplate_field_cache');
+            if (savedFields) {
+                const state = JSON.parse(savedFields);
+                document.getElementById('input1_tab1').value = state.input1_t1 || '';
+                document.getElementById('input2_tab1').value = state.input2_t1 || '';
+                document.getElementById('input1_tab2').value = state.input1_t2 || '';
+                document.getElementById('input2_tab2').value = state.input2_t2 || '';
+            }
+
+            const savedTab = localStorage.getItem('boilerplate_active_tab');
+            if (savedTab) {
+                switchTab(savedTab);
+            }
+
+            calculateTab1();
+            calculateTab2();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            restoreFieldState();
+        });
+
+        // REGISTER SERVICE WORKER WITH Explicitly BOUND SANDBOX SCOPE
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js', { scope: './' })
+                    .then((reg) => console.log('Boilerplate Service Worker registered with scope:', reg.scope))
+                    .catch((err) => console.log('Boilerplate Service Worker registration failed:', err));
+            });
         }
     </script>
 </body>
