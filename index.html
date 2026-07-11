@@ -240,10 +240,13 @@
         window.addEventListener('DOMContentLoaded', loadMasterData);
 
         
-        // Change this block at the bottom of index.html:
+        // Dynamic Namespace Isolation Block
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js', { scope: './' })
+                // Dynamically computes the explicit subfolder namespace (e.g., "/Boilerplate/")
+                const dynamicScope = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+
+                navigator.serviceWorker.register('./sw.js', { scope: dynamicScope })
                     .then((reg) => console.log('Boilerplate Service Worker registered with scope:', reg.scope))
                     .catch((err) => console.log('Boilerplate Service Worker registration failed:', err));
             });
